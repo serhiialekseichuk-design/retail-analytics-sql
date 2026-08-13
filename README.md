@@ -72,21 +72,7 @@ Use Acode purely as the editor to browse/tweak the `.sql` files
 and `seed_data.py`; run everything through the Termux terminal
 (Acode has a built-in Termux plugin for exactly this workflow).
 
-## Using this for Fiverr / Upwork
-
-1. Push the folder to a public GitHub repo — clients and buyers
-   trust a linked repo far more than pasted code.
-2. Take 2–3 screenshots of query results (e.g. the RFM segment
-   summary, the cohort retention table) — visuals sell gigs.
-3. Suggested gig title: *"I will design a SQL database and write
-   advanced analytical queries (CTEs, window functions, RFM)"*.
-4. In your gig description, name the concrete deliverables clients
-   recognize: schema design, indexing, RFM segmentation, cohort
-   retention, running totals/moving averages, views & triggers.
-5. Offer this as a demo, then scope real client work as: "same
-   analysis, applied to your own database/CSV export."
-
-## Extending it further (good upsell ideas for a gig)
+## Extending it further
 
 - Add a `discounts`/`promotions` table and a query measuring
   promo lift.
