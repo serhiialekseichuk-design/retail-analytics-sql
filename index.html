@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serhii Alekseichuk — SQL & Data Analytics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,500&family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0c1420;
+    --panel:#111b2b;
+    --panel-2:#0f1826;
+    --line: rgba(231,236,243,0.10);
+    --line-strong: rgba(231,236,243,0.18);
+    --text:#e7ecf3;
+    --muted:#8fa0b5;
+    --teal:#57d9c9;
+    --amber:#f2a65a;
+    --rose:#e07a7a;
+    --slate:#64748b;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--ink);
+    color:var(--text);
+    font-family:'Inter', sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(ellipse 80% 50% at 50% 0%, #000 20%, transparent 70%);
+    pointer-events:none;
+    opacity:0.5;
+    z-index:0;
+  }
+  .wrap{max-width:920px; margin:0 auto; padding:0 24px; position:relative; z-index:1;}
+  .mono{font-family:'JetBrains Mono', monospace;}
+  a{color:inherit;}
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:sticky; top:0; z-index:20;
+    background:rgba(12,20,32,0.86);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  nav .wrap{display:flex; align-items:center; justify-content:space-between; padding-top:16px; padding-bottom:16px;}
+  .brand{font-family:'JetBrains Mono',monospace; font-weight:600; font-size:14px; letter-spacing:0.02em;}
+  .brand span{color:var(--teal);}
+  nav .links{display:flex; gap:28px; font-size:13px; color:var(--muted);}
+  nav .links a:hover{color:var(--text);}
+  .cta-btn{
+    font-family:'JetBrains Mono',monospace;
+    font-size:13px; font-weight:600;
+    background:var(--teal); color:#06211d;
+    padding:9px 16px; border-radius:3px;
+    text-decoration:none;
+    white-space:nowrap;
+  }
+
+  /* ---------- HERO ---------- */
+  header.hero{padding:76px 0 60px;}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12.5px; color:var(--teal);
+    letter-spacing:0.06em;
+    display:flex; align-items:center; gap:10px;
+    margin-bottom:22px;
+  }
+  .eyebrow::before{content:"●"; font-size:9px; animation:blink 1.8s infinite;}
+  @keyframes blink{0%,100%{opacity:1} 50%{opacity:0.25}}
+  h1{
+    font-family:'Newsreader', serif;
+    font-weight:500;
+    font-size:clamp(34px, 6vw, 54px);
+    line-height:1.08;
+    letter-spacing:-0.01em;
+    max-width:14ch;
+  }
+  h1 em{font-style:italic; color:var(--teal); font-weight:500;}
+  .lede{
+    margin-top:22px; max-width:52ch;
+    color:var(--muted); font-size:17px;
+  }
+  .hero-actions{margin-top:32px; display:flex; gap:14px; flex-wrap:wrap;}
+  .btn-primary{
+    background:var(--teal); color:#06211d;
+    font-family:'JetBrains Mono',monospace; font-weight:600; font-size:14px;
+    padding:13px 22px; border-radius:3px; text-decoration:none;
+  }
+  .btn-ghost{
+    border:1px solid var(--line-strong); color:var(--text);
+    font-family:'JetBrains Mono',monospace; font-size:14px;
+    padding:13px 22px; border-radius:3px; text-decoration:none;
+  }
+
+  /* ---------- TERMINAL CARD (signature element) ---------- */
+  .terminal{
+    margin-top:56px;
+    background:var(--panel);
+    border:1px solid var(--line-strong);
+    border-radius:8px;
+    overflow:hidden;
+    box-shadow:0 30px 60px -20px rgba(0,0,0,0.6);
+  }
+  .term-bar{
+    display:flex; align-items:center; gap:8px;
+    padding:11px 16px;
+    background:var(--panel-2);
+    border-bottom:1px solid var(--line);
+  }
+  .term-dot{width:9px; height:9px; border-radius:50%; background:#3a4759;}
+  .term-title{
+    margin-left:6px; font-family:'JetBrains Mono',monospace;
+    font-size:12px; color:var(--slate);
+  }
+  .term-body{padding:22px 20px; font-family:'JetBrains Mono',monospace; font-size:13px; overflow-x:auto;}
+  .prompt{color:var(--teal);}
+  .term-cmd{color:var(--text); opacity:0.9;}
+  .term-comment{color:var(--slate); margin:14px 0 10px;}
+  table.rfm{width:100%; border-collapse:collapse; margin-top:6px; min-width:520px;}
+  table.rfm th{
+    text-align:left; font-weight:500; color:var(--slate);
+    font-size:11.5px; padding:6px 10px; border-bottom:1px solid var(--line-strong);
+    text-transform:uppercase; letter-spacing:0.04em;
+  }
+  table.rfm td{padding:8px 10px; border-bottom:1px solid var(--line); font-size:12.5px;}
+  .tag{
+    display:inline-block; padding:2px 8px; border-radius:20px; font-size:11px;
+    font-family:'JetBrains Mono',monospace;
+  }
+  .tag-risk{background:rgba(224,122,122,0.15); color:var(--rose);}
+  .tag-attn{background:rgba(242,166,90,0.15); color:var(--amber);}
+  .tag-champ{background:rgba(87,217,201,0.15); color:var(--teal);}
+  .tag-loyal{background:rgba(87,217,201,0.10); color:#9fd8cf;}
+  .tag-new{background:rgba(143,160,181,0.15); color:var(--muted);}
+  .tag-lost{background:rgba(100,116,139,0.15); color:var(--slate);}
+  .num{text-align:right; color:var(--text);}
+
+  /* ---------- SECTION SHELL ---------- */
+  section{padding:64px 0; border-top:1px solid var(--line);}
+  .section-head{margin-bottom:36px;}
+  .kicker{
+    font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--teal);
+    letter-spacing:0.08em; text-transform:uppercase; margin-bottom:10px;
+  }
+  h2{font-family:'Newsreader', serif; font-weight:500; font-size:clamp(24px,4vw,32px);}
+  .section-sub{color:var(--muted); margin-top:10px; max-width:60ch;}
+
+  /* ---------- DELIVERABLES GRID ---------- */
+  .grid{display:grid; grid-template-columns:repeat(2, 1fr); gap:14px; margin-top:8px;}
+  @media(max-width:640px){.grid{grid-template-columns:1fr;}}
+  .card{
+    background:var(--panel); border:1px solid var(--line);
+    border-radius:6px; padding:20px;
+  }
+  .card .idx{font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--teal); margin-bottom:10px;}
+  .card h3{font-size:16px; font-weight:600; margin-bottom:8px;}
+  .card p{color:var(--muted); font-size:14px;}
+
+  /* ---------- PACKAGES ---------- */
+  .pkgs{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:8px;}
+  @media(max-width:760px){.pkgs{grid-template-columns:1fr;}}
+  .pkg{
+    background:var(--panel); border:1px solid var(--line);
+    border-radius:8px; padding:26px 22px; display:flex; flex-direction:column;
+  }
+  .pkg.featured{border-color:var(--teal); box-shadow:0 0 0 1px var(--teal);}
+  .pkg-name{font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--muted); letter-spacing:0.06em; text-transform:uppercase;}
+  .pkg-price{font-family:'Newsreader',serif; font-size:38px; margin:10px 0 4px;}
+  .pkg-price span{font-size:15px; color:var(--muted); font-family:'Inter',sans-serif;}
+  .pkg-desc{color:var(--muted); font-size:13.5px; margin-bottom:18px;}
+  .pkg ul{list-style:none; flex-grow:1;}
+  .pkg li{
+    font-size:13.5px; padding:8px 0; border-top:1px solid var(--line);
+    display:flex; gap:8px;
+  }
+  .pkg li:first-child{border-top:none;}
+  .pkg li::before{content:"→"; color:var(--teal); flex-shrink:0;}
+  .pkg-cta{
+    margin-top:20px; text-align:center; padding:11px; border-radius:4px;
+    font-family:'JetBrains Mono',monospace; font-size:13px; font-weight:600;
+    background:rgba(255,255,255,0.04); border:1px solid var(--line-strong);
+  }
+  .pkg.featured .pkg-cta{background:var(--teal); color:#06211d; border:none;}
+
+  /* ---------- STACK STRIP ---------- */
+  .stack{display:flex; flex-wrap:wrap; gap:10px; margin-top:8px;}
+  .chip{
+    font-family:'JetBrains Mono',monospace; font-size:12.5px;
+    border:1px solid var(--line-strong); padding:7px 12px; border-radius:20px;
+    color:var(--muted);
+  }
+
+  /* ---------- FOOTER / CONTACT ---------- */
+  footer{padding:60px 0 80px;}
+  .contact-box{
+    background:var(--panel); border:1px solid var(--line-strong);
+    border-radius:10px; padding:40px 32px; text-align:center;
+  }
+  .contact-box h2{margin-bottom:12px;}
+  .contact-box p{color:var(--muted); max-width:46ch; margin:0 auto 26px;}
+  .foot-meta{
+    margin-top:40px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;
+    font-size:12.5px; color:var(--slate); font-family:'JetBrains Mono',monospace;
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="brand">serhii<span>@</span>analytics</div>
+    <div class="links">
+      <a href="#work">Work</a>
+      <a href="#packages">Packages</a>
+      <a href="#stack">Stack</a>
+    </div>
+    <a class="cta-btn" href="https://www.fiverr.com/s/qD2KvpZ" target="_blank" rel="noopener">Hire me</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">AVAILABLE FOR NEW PROJECTS</div>
+    <h1>I turn raw data into decisions your business can <em>act on</em>.</h1>
+    <p class="lede">
+      SQL database design and analytics for e-commerce, retail, and SaaS teams —
+      customer segmentation, retention reporting, and dashboards built on queries
+      that hold up under real business scrutiny, not just tutorials.
+    </p>
+    <div class="hero-actions">
+      <a class="btn-primary" href="#contact">Start a project</a>
+      <a class="btn-ghost" href="#work">See the sample project</a>
+    </div>
+
+    <div class="terminal" id="work">
+      <div class="term-bar">
+        <div class="term-dot"></div><div class="term-dot"></div><div class="term-dot"></div>
+        <div class="term-title">retail.db — customer segmentation</div>
+      </div>
+      <div class="term-body">
+        <div><span class="prompt">$</span> <span class="term-cmd">sqlite3 retail.db < queries/02_customer_segmentation.sql</span></div>
+        <div class="term-comment">-- RFM segment summary, 500 customers / 3,000 orders</div>
+        <table class="rfm">
+          <tr><th>segment</th><th>customers</th><th>revenue</th></tr>
+          <tr><td><span class="tag tag-risk">At Risk (High Value)</span></td><td class="num">94</td><td class="num">$1,228,138.91</td></tr>
+          <tr><td><span class="tag tag-attn">Needs Attention</span></td><td class="num">104</td><td class="num">$791,927.35</td></tr>
+          <tr><td><span class="tag tag-champ">Champions</span></td><td class="num">24</td><td class="num">$274,457.89</td></tr>
+          <tr><td><span class="tag tag-loyal">Loyal Customers</span></td><td class="num">35</td><td class="num">$206,708.53</td></tr>
+          <tr><td><span class="tag tag-new">New / Promising</span></td><td class="num">97</td><td class="num">$202,821.96</td></tr>
+          <tr><td><span class="tag tag-lost">Lost / Churned</span></td><td class="num">38</td><td class="num">$92,739.86</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">What I build</div>
+      <h2>Not SELECT * — decisions.</h2>
+      <p class="section-sub">
+        Every project starts from a real schema and ends with a query a stakeholder
+        can act on the same day.
+      </p>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <div class="idx">01</div>
+        <h3>Schema design & indexing</h3>
+        <p>Normalized tables, foreign keys, and indexes tuned for the queries you'll actually run — not a generic ERD template.</p>
+      </div>
+      <div class="card">
+        <div class="idx">02</div>
+        <h3>Customer segmentation (RFM)</h3>
+        <p>Recency / Frequency / Monetary scoring with window functions — the same technique retention teams use to prioritize campaigns.</p>
+      </div>
+      <div class="card">
+        <div class="idx">03</div>
+        <h3>Cohort retention analysis</h3>
+        <p>Month-by-month retention curves so you can see exactly where customers drop off after their first purchase.</p>
+      </div>
+      <div class="card">
+        <div class="idx">04</div>
+        <h3>Trends & rankings</h3>
+        <p>Running totals, moving averages, year-over-year growth, and top-N rankings using RANK(), LAG(), and friends.</p>
+      </div>
+      <div class="card">
+        <div class="idx">05</div>
+        <h3>Views & automation</h3>
+        <p>Reusable views ready for Metabase/Power BI/Tableau, plus triggers that keep totals and stock in sync automatically.</p>
+      </div>
+      <div class="card">
+        <div class="idx">06</div>
+        <h3>Query optimization</h3>
+        <p>EXPLAIN ANALYZE walkthroughs and indexing fixes when your existing queries are the ones slowing you down.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="packages">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Packages</div>
+      <h2>Pick a starting point — every project is scoped to your data.</h2>
+    </div>
+    <div class="pkgs">
+      <div class="pkg">
+        <div class="pkg-name">Basic</div>
+        <div class="pkg-price">$60</div>
+        <div class="pkg-desc">A focused set of queries against your existing database.</div>
+        <ul>
+          <li>Up to 5 custom SQL queries</li>
+          <li>Joins, filtering, aggregation</li>
+          <li>Delivered as runnable .sql + short write-up</li>
+          <li>2-day delivery</li>
+        </ul>
+        <div class="pkg-cta">Get started</div>
+      </div>
+      <div class="pkg featured">
+        <div class="pkg-name">Standard</div>
+        <div class="pkg-price">$180</div>
+        <div class="pkg-desc">Full analytics layer for one part of your business.</div>
+        <ul>
+          <li>Schema review or design</li>
+          <li>RFM segmentation or cohort retention</li>
+          <li>Reusable views for your BI tool</li>
+          <li>1 revision round</li>
+          <li>4-day delivery</li>
+        </ul>
+        <div class="pkg-cta">Most popular</div>
+      </div>
+      <div class="pkg">
+        <div class="pkg-name">Premium</div>
+        <div class="pkg-price">$400+</div>
+        <div class="pkg-desc">End-to-end analytics database, built around your data.</div>
+        <ul>
+          <li>Full schema design + indexing</li>
+          <li>Segmentation, retention, and trend reporting</li>
+          <li>Views, triggers, and performance tuning</li>
+          <li>Documentation + handoff call</li>
+          <li>7–10 day delivery</li>
+        </ul>
+        <div class="pkg-cta">Get started</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="stack">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Toolkit</div>
+      <h2>Works with what you already run.</h2>
+    </div>
+    <div class="stack">
+      <div class="chip">PostgreSQL</div>
+      <div class="chip">MySQL</div>
+      <div class="chip">SQLite</div>
+      <div class="chip">Window Functions</div>
+      <div class="chip">CTEs</div>
+      <div class="chip">Query Optimization</div>
+      <div class="chip">Python (pandas)</div>
+      <div class="chip">Metabase / Power BI</div>
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="wrap">
+    <div class="contact-box">
+      <h2>Have a dataset that should be telling you more?</h2>
+      <p>Send a short description of what you're tracking and what decision you're trying to make — I'll reply with a scoped plan, no generic template.</p>
+      <a class="btn-primary" href="https://www.fiverr.com/s/qD2KvpZ" target="_blank" rel="noopener">Message me on Fiverr</a>
+    </div>
+    <div class="foot-meta">
+      <span>© 2026 Serhii Alekseichuk</span>
+      <span>SQL · Data Analytics · Reporting</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
